@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:alpine # Imagen ligera de Nginx compatible con RPi
+    container_name: spa-activities-web # Nombre del contenedor
+    restart: unless-stopped # Reinicia si falla
+    ports:
+      # Mapea el puerto 8080 de la Pi al puerto 80 del contenedor
+      - "8080:80"
+    volumes:
+      # Monta el directorio actual (donde está este docker-compose.yml y tu index.html)
+      # en el directorio web raíz de Nginx dentro del contenedor.
+      # ':ro' = Read Only (Solo lectura para el contenedor)
+      - .:/usr/share/nginx/html:ro
