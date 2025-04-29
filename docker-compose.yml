@@ -7,7 +7,7 @@ services:
     restart: unless-stopped # Reinicia si falla
     ports:
       # Mapea el puerto 8080 de la Pi al puerto 80 del contenedor
-      - "8080:80"
+      - "9988:80"
     volumes:
       # Monta el directorio actual (donde está este docker-compose.yml y tu index.html)
       # en el directorio web raíz de Nginx dentro del contenedor.
