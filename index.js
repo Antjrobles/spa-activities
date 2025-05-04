@@ -19,18 +19,18 @@ function activityHub() {
           {
             title: "WordWall",
             description: "Aprende jugando",
-            link: "https://worldwall.net",
+            link: "https://wordwall.net/es",
             icon: "fa-solid fa-graduation-cap",
             visited: false,
           },
-          {
+/*           {
             title: "Duolingo",
             description: "Aprende jugando",
             link: "https://es.duolingo.com/course/en/es/Aprender-ingl%C3%A9s",
             icon: "fab fa-earlybirds",
             visited: false,
-          },
-          {
+          }, */
+/*           {
             title: "British Council Kids",
             description: "Juegos y canciones",
             link: "https://learnenglishkids.britishcouncil.org/",
@@ -50,7 +50,7 @@ function activityHub() {
             link: "https://www.cambridgeenglish.org/learning-english/activities-for-learners/",
             icon: "fa-solid fa-book",
             visited: false,
-          },
+          }, */
         ],
       },
       {
@@ -141,11 +141,11 @@ function activityHub() {
           {
             title: "WordWall",
             description: "Aprende jugando",
-            link: "https://worldwall.net",
+            link: "https://wordwall.net/es",
             icon: "fa-solid fa-graduation-cap",
             visited: false,
           },
-          {
+         /*  {
             title: "Duolingo",
             description: "Aprende jugando",
             link: "https://es.duolingo.com/course/en/es/Aprender-ingl%C3%A9s",
@@ -172,7 +172,7 @@ function activityHub() {
             link: "https://www.cambridgeenglish.org/learning-english/activities-for-learners/",
             icon: "fa-solid fa-book",
             visited: false,
-          },
+          }, */
         ],
       },
       {
@@ -352,13 +352,13 @@ const textoOriginal = titulo.innerText;
 function mezclarLetras(texto) {
   // Convertir el texto a un array de caracteres
   const array = texto.split('');
-  
+
   // Algoritmo Fisher-Yates para mezclar el array
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
-  
+
   // Convertir de nuevo a string
   return array.join('');
 }
@@ -367,32 +367,32 @@ function mezclarLetras(texto) {
 function recomponerTexto(textoOriginal, iteraciones, intervalo) {
   let contador = 0;
   let textoActual = titulo.innerText;
-  
+
   // Calculamos cuántas letras arreglar en cada paso
   const letrasArreglarPorPaso = Math.ceil(textoOriginal.length / iteraciones);
-  
+
   const intervalRecomposicion = setInterval(() => {
     contador++;
-    
+
     if (contador >= iteraciones) {
       // En la última iteración, restauramos completamente el texto original
       titulo.innerText = textoOriginal;
       clearInterval(intervalRecomposicion);
       return;
     }
-    
+
     // Vamos reemplazando letras gradualmente
     let textoMezclado = textoActual.split('');
-    
+
     // Determinar qué letras reemplazar en este paso
     for (let i = 0; i < letrasArreglarPorPaso; i++) {
       const posicion = Math.floor(Math.random() * textoOriginal.length);
       textoMezclado[posicion] = textoOriginal[posicion];
     }
-    
+
     textoActual = textoMezclado.join('');
     titulo.innerText = textoActual;
-    
+
   }, intervalo);
 }
 
@@ -411,17 +411,17 @@ titulo.onmouseover = function() {
 titulo.onmouseout = function() {
   // Detener el intervalo de mezcla pero no restaurar inmediatamente
   clearInterval(intervaloMezcla);
-  
+
   // Seguir mezclando por un momento antes de comenzar a recomponer
   setTimeout(() => {
     // Continuar mezclando durante 500ms más
     let cuentaMezclaFinal = 0;
     const mezclasFinales = 5; // Número de mezclas adicionales
-    
+
     const intervaloFinal = setInterval(() => {
       titulo.innerText = mezclarLetras(textoOriginal);
       cuentaMezclaFinal++;
-      
+
       if (cuentaMezclaFinal >= mezclasFinales) {
         clearInterval(intervaloFinal);
         // Comenzar a recomponer gradualmente
