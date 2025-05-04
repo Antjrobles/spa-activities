@@ -21,19 +21,25 @@
     <!-- Título Principal -->
     <div class="text-center mb-12">
       <h1
-          class="mt-1 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-4xl font-extrabold uppercase tracking-tighter text-transparent sm:text-5xl lg:text-7xl" id="titulo">
+          class="mt-1 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-4xl font-extrabold uppercase tracking-tighter text-transparent sm:text-5xl lg:text-7xl"
+          id="titulo">
         Marco y Julia Activity Hub
       </h1>
-      <p class="text-gray-400">Pincha en tu nombre para ver las actividades</p>
+      <!-- MODIFICADO: Texto inicial -->
+      <p class="text-gray-400" x-show="activeTab === null">Pincha en tu nombre e introduce tu clave para ver las
+        actividades</p>
+      <p class="text-gray-400" x-show="activeTab !== null">¡Hola de nuevo! Explora tus actividades.</p>
+      <!-- Podríamos añadir un botón de reset aquí si quisiéramos -->
+      <!-- <button @click="resetVisited()" class="mt-2 text-xs text-gray-500 hover:text-red-400">Reiniciar todo (incluye claves)</button> -->
     </div>
 
     <!-- Pestañas de Selección (Julia/Marco) -->
-    <!-- Ocultamos pestañas si hay una categoría abierta -->
+    <!-- MODIFICADO: Se muestran siempre que no haya una categoría abierta (como antes) -->
     <div class="flex justify-center mb-8" x-show="openCategoryIndex.julia === null && openCategoryIndex.marco === null">
-      <!-- Botones Julia y Marco -->
       <div class="inline-flex rounded-full shadow-md overflow-hidden">
+        <!-- MODIFICADO: El @click llama a requestTabSwitch -->
         <button
-                @click="activeTab = 'julia'; closeCategories()"
+                @click="requestTabSwitch('julia')"
                 :class="{
                         'bg-gradient-to-r from-pink-500 to-red-500 text-white': activeTab === 'julia',
                         'bg-white text-gray-700 hover:bg-pink-50': activeTab !== 'julia'
@@ -41,8 +47,9 @@
                 class="tab-button px-16 py-2 font-medium rounded-full transition-all duration-300 focus:outline-none">
           Julia
         </button>
+        <!-- MODIFICADO: El @click llama a requestTabSwitch -->
         <button
-                @click="activeTab = 'marco'; closeCategories()"
+                @click="requestTabSwitch('marco')"
                 :class="{
                         'bg-gradient-to-r from-teal-400 to-cyan-500 text-white': activeTab === 'marco',
                         'bg-white text-gray-700 hover:bg-teal-50': activeTab !== 'marco'
@@ -59,9 +66,11 @@
       <!-- ******************** -->
       <!-- Actividades de Julia -->
       <!-- ******************** -->
-      <div x-show="activeTab === 'julia'" x-transition>
+      <!-- MODIFICADO: Añadido chequeo de isAuthenticated.julia -->
+      <div x-show="activeTab === 'julia' && isAuthenticated.julia" x-transition>
         <!-- Vista Lista Principal Julia (si no hay categoría abierta) -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.julia === null">
+          <!-- ... (contenido interno sin cambios) ... -->
           <div class="text-center bg-gradient-to-r from-pink-500 to-red-500 rounded-full">
             <h2 class="text-4xl font-bold text-white p-3">Julia</h2>
           </div>
@@ -115,7 +124,9 @@
         </div>
 
         <!-- Vista Submenú Julia (si hay categoría abierta) -->
+        <!-- MODIFICADO: El x-show principal ya controla la autenticación -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.julia !== null" x-transition>
+          <!-- ... (contenido interno sin cambios) ... -->
           <template x-if="openCategoryIndex.julia !== null"> <!-- Evita error si es null -->
             <div> <!-- Necesario para que x-if funcione bien con template -->
               <!-- Botón Volver y Título de Categoría -->
@@ -170,9 +181,11 @@
       <!-- ******************** -->
       <!-- Actividades de Marco -->
       <!-- ******************** -->
-      <div x-show="activeTab === 'marco'" x-transition>
+      <!-- MODIFICADO: Añadido chequeo de isAuthenticated.marco -->
+      <div x-show="activeTab === 'marco' && isAuthenticated.marco" x-transition>
         <!-- Vista Lista Principal Marco (si no hay categoría abierta) -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.marco === null">
+          <!-- ... (contenido interno sin cambios) ... -->
           <div class="text-center mb-6 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-full">
             <h2 class="text-4xl font-bold text-white p-3">Marco</h2>
             <!--<p class="text-black">10 años</p>-->
@@ -227,7 +240,9 @@
         </div>
 
         <!-- Vista Submenú Marco (si hay categoría abierta) -->
+        <!-- MODIFICADO: El x-show principal ya controla la autenticación -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.marco !== null" x-transition>
+          <!-- ... (contenido interno sin cambios) ... -->
           <template x-if="openCategoryIndex.marco !== null"> <!-- Evita error si es null -->
             <div> <!-- Necesario para que x-if funcione bien con template -->
               <!-- Botón Volver y Título de Categoría -->

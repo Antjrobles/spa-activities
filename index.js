@@ -1,14 +1,24 @@
 function activityHub() {
   return {
-    activeTab: "julia",
-    // Nuevo: Guarda el ÍNDICE de la categoría abierta para cada uno, o null si ninguna
+    // activeTab: "julia", // Empezamos sin ninguna pestaña activa hasta autenticar
+    activeTab: null,
     openCategoryIndex: {
       julia: null,
       marco: null,
     },
+    // --- NUEVO: Estado de autenticación ---
+    isAuthenticated: {
+      julia: false,
+      marco: false,
+    },
+    // --- NUEVO: Claves (¡CAMBIA ESTAS CLAVES!) ---
+    correctKeys: {
+      julia: "julia2016", // Cambia esta clave secreta para Julia
+      marco: "marco2014", // Cambia esta clave secreta para Marco
+    },
 
-    // Modificamos los datos para incluir 'type' y 'subActivities'
     juliaActivities: [
+      // ... (tus actividades de Julia sin cambios) ...
       {
         type: "category",
         title: "Inglés con Donna",
@@ -19,38 +29,10 @@ function activityHub() {
           {
             title: "WordWall",
             description: "Aprende jugando",
-            link: "https://wordwall.net/es",
+            link: "https://wordwall.net/myactivities",
             icon: "fa-solid fa-graduation-cap",
             visited: false,
           },
-/*           {
-            title: "Duolingo",
-            description: "Aprende jugando",
-            link: "https://es.duolingo.com/course/en/es/Aprender-ingl%C3%A9s",
-            icon: "fab fa-earlybirds",
-            visited: false,
-          }, */
-/*           {
-            title: "British Council Kids",
-            description: "Juegos y canciones",
-            link: "https://learnenglishkids.britishcouncil.org/",
-            icon: "fas fa-child",
-            visited: false,
-          },
-          {
-            title: "BBC Learning English",
-            description: "Lecciones y noticias",
-            link: "https://www.bbc.co.uk/learningenglish",
-            icon: "fas fa-newspaper",
-            visited: false,
-          },
-          {
-            title: "Cambridge Activities",
-            description: "Ejercicios por nivel",
-            link: "https://www.cambridgeenglish.org/learning-english/activities-for-learners/",
-            icon: "fa-solid fa-book",
-            visited: false,
-          }, */
         ],
       },
       {
@@ -76,61 +58,9 @@ function activityHub() {
           },
         ],
       },
-      {
-        type: "link", // Tipo enlace directo
-        title: "Artes plásticas",
-        description: "Explora tu creatividad con dibujos y pinturas",
-        link: "https://www.educacionplastica.net/",
-        icon: "fas fa-paint-brush",
-        visited: false,
-      },
-      {
-        type: "category", // Tipo categoría
-        title: "Juegos de lenguaje",
-        description: "Aprende jugando con palabras y letras",
-        icon: "fas fa-book",
-        visited: false, // Las categorías no se marcan como visitadas
-        subActivities: [
-          // Array de sub-actividades
-          {
-            title: "Mundo Primaria Lenguaje",
-            link: "https://www.mundoprimaria.com/juegos-educativos/juegos-lenguaje",
-            icon: "fas fa-puzzle-piece",
-            visited: false,
-          },
-          {
-            title: "Cokitos Juegos de Lengua",
-            link: "https://www.cokitos.com/tag/juegos-de-lengua/",
-            icon: "fas fa-comments",
-            visited: false,
-          },
-          {
-            title: "Vedoque Lengua",
-            link: "https://vedoque.com/sec.php?s=6",
-            icon: "fas fa-graduation-cap",
-            visited: false,
-          },
-        ],
-      },
-
-      {
-        type: "link",
-        title: "Exploración animal",
-        description: "Descubre el fascinante mundo de los animales",
-        link: "https://www.nationalgeographic.es/animales",
-        icon: "fas fa-paw",
-        visited: false,
-      },
-      {
-        type: "link",
-        title: "Cuentos interactivos",
-        description: "Historias divertidas para leer y escuchar",
-        link: "https://www.cuentosinfantiles.net/",
-        icon: "fas fa-book-reader",
-        visited: false,
-      },
     ],
     marcoActivities: [
+      // ... (tus actividades de Marco sin cambios) ...
       {
         type: "category",
         title: "Inglés con Donna",
@@ -145,34 +75,6 @@ function activityHub() {
             icon: "fa-solid fa-graduation-cap",
             visited: false,
           },
-         /*  {
-            title: "Duolingo",
-            description: "Aprende jugando",
-            link: "https://es.duolingo.com/course/en/es/Aprender-ingl%C3%A9s",
-            icon: "fab fa-earlybirds",
-            visited: false,
-          },
-          {
-            title: "British Council Kids",
-            description: "Juegos y canciones",
-            link: "https://learnenglishkids.britishcouncil.org/",
-            icon: "fas fa-child",
-            visited: false,
-          },
-          {
-            title: "BBC Learning English",
-            description: "Lecciones y noticias",
-            link: "https://www.bbc.co.uk/learningenglish",
-            icon: "fas fa-newspaper",
-            visited: false,
-          },
-          {
-            title: "Cambridge Activities",
-            description: "Ejercicios por nivel",
-            link: "https://www.cambridgeenglish.org/learning-english/activities-for-learners/",
-            icon: "fa-solid fa-book",
-            visited: false,
-          }, */
         ],
       },
       {
@@ -250,13 +152,43 @@ function activityHub() {
         icon: "fas fa-landmark",
         visited: false,
       },
-      // Puedes seguir añadiendo más actividades de tipo 'link' o 'category'
     ],
 
     // --- MÉTODOS ---
 
-    // Método para abrir/cerrar una categoría
+    // --- NUEVO: Método para intentar cambiar de pestaña (pide clave si es necesario) ---
+    requestTabSwitch(person) {
+      // Si ya está autenticado para esa persona, simplemente cambia la pestaña
+      if (this.isAuthenticated[person]) {
+        this.activeTab = person;
+        this.closeCategories(); // Cierra categorías al cambiar
+        return;
+      }
+
+      // Si no está autenticado, pide la clave
+      const enteredKey = prompt(`Hola ${person.charAt(0).toUpperCase() + person.slice(1)}, introduce tu clave:`);
+
+      // Si el usuario cancela el prompt (enteredKey es null)
+      if (enteredKey === null) {
+        return; // No hacer nada
+      }
+
+      // Comprueba si la clave introducida es correcta
+      if (enteredKey === this.correctKeys[person]) {
+        // Clave correcta: marca como autenticado y cambia la pestaña
+        this.isAuthenticated[person] = true;
+        this.activeTab = person;
+        this.closeCategories();
+        console.log(`${person} autenticado correctamente.`);
+      } else {
+        // Clave incorrecta: muestra un mensaje y no hagas nada más
+        alert("¡Clave incorrecta! Inténtalo de nuevo.");
+        console.log(`Intento fallido de autenticación para ${person}.`);
+      }
+    },
+
     toggleCategory(person, index) {
+      // ... (código existente sin cambios) ...
       const list =
         person === "julia" ? this.juliaActivities : this.marcoActivities;
 
@@ -278,32 +210,22 @@ function activityHub() {
       }
     },
 
-    // Método para cerrar todas las categorías (útil al cambiar de pestaña)
     closeCategories() {
       this.openCategoryIndex.julia = null;
       this.openCategoryIndex.marco = null;
     },
 
-    // Marca un enlace DIRECTO como visitado
     markVisited(person, index) {
+      // ... (código existente sin cambios) ...
       const list =
         person === "julia" ? this.juliaActivities : this.marcoActivities;
       if (list[index] && list[index].type === "link") {
-        // Alpine v2 necesita que reasignes para detectar cambios en arrays a veces
-        // aunque modificar la propiedad debería bastar aquí.
         list[index].visited = true;
-        // Para estar seguros, podríamos hacer:
-        // if (person === 'julia') this.juliaActivities = [...this.juliaActivities];
-        // else this.marcoActivities = [...this.marcoActivities];
-        // Pero prueba primero sin esto, debería funcionar.
       }
-      // IMPORTANTE: Esto NO guarda el estado si cierras el navegador.
-      // Para eso se necesitaría localStorage (como en mi respuesta errónea anterior).
-      // Si quieres añadirlo DIME, pero empezamos simple.
     },
 
-    // Marca una SUB-ACTIVIDAD como visitada
     markSubVisited(person, categoryIndex, subIndex) {
+      // ... (código existente sin cambios) ...
       const list =
         person === "julia" ? this.juliaActivities : this.marcoActivities;
       if (
@@ -312,12 +234,10 @@ function activityHub() {
         list[categoryIndex].subActivities[subIndex]
       ) {
         list[categoryIndex].subActivities[subIndex].visited = true;
-        // Como antes, puede que necesite reasignar el array principal para
-        // que Alpine v2 detecte el cambio profundo. Prueba sin ello primero.
       }
     },
 
-    // Reinicia TODOS los estados 'visited'
+    // --- MODIFICADO: Reset también reinicia la autenticación ---
     resetVisited() {
       const resetList = (list) => {
         list.forEach((activity) => {
@@ -327,22 +247,25 @@ function activityHub() {
             activity.subActivities.forEach((sub) => (sub.visited = false));
           }
         });
-        return list; // Devuelve la lista modificada
+        return list;
       };
 
-      // Reasignamos para asegurar que Alpine detecta el cambio
       this.juliaActivities = resetList([...this.juliaActivities]);
       this.marcoActivities = resetList([...this.marcoActivities]);
 
-      // También cerramos cualquier categoría abierta al reiniciar
+      // --- NUEVO: Reiniciar autenticación ---
+      this.isAuthenticated.julia = false;
+      this.isAuthenticated.marco = false;
+      this.activeTab = null; // Ninguna pestaña activa después del reset
+
       this.closeCategories();
-      console.log("Estado visitado reiniciado.");
+      console.log("Estado visitado y autenticación reiniciados.");
+      alert("¡Todo reiniciado! Introduce tu clave de nuevo si quieres ver las actividades."); // Aviso al usuario
     },
   };
 }
 
-
-
+// --- El resto del código de index.js (efecto título) sin cambios ---
 // Obtenemos el elemento por su id
 const titulo = document.getElementById('titulo');
 // Guardamos el texto original
@@ -400,7 +323,7 @@ function recomponerTexto(textoOriginal, iteraciones, intervalo) {
 let intervaloMezcla;
 
 // Añadimos el evento onmouseover
-titulo.onmouseover = function() {
+titulo.onmouseover = function () {
   // Iniciar la mezcla aleatoria en un intervalo
   intervaloMezcla = setInterval(() => {
     titulo.innerText = mezclarLetras(textoOriginal);
@@ -408,7 +331,7 @@ titulo.onmouseover = function() {
 }
 
 // Añadimos el evento onmouseout
-titulo.onmouseout = function() {
+titulo.onmouseout = function () {
   // Detener el intervalo de mezcla pero no restaurar inmediatamente
   clearInterval(intervaloMezcla);
 
