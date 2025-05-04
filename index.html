@@ -5,18 +5,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marco y Julia Activity Hub</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js -->
   <script
           src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js"
           defer></script>
+  <!-- Font Awesome Icons -->
   <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Custom CSS -->
   <link href="main.css" rel="stylesheet" />
+  <!-- Estilo adicional para animación suave (opcional) -->
+  <style>
+    .fade-in-scale {
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .fade-in-scale-start {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    .fade-in-scale-end {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Animación de pulso suave para iconos */
+    @keyframes gentle-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    .icon-pulse {
+      animation: gentle-pulse 2s ease-in-out infinite;
+    }
+  </style>
 </head>
 
 <body
       class="min-h-screen bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-gray-400 via-black to-black text-gray-800">
+  <!-- Alpine.js Component Root -->
   <div class="container mx-auto px-4 py-8" x-data="activityHub()">
     <!-- Título Principal -->
     <div class="text-center mb-12">
@@ -25,19 +63,16 @@
           id="titulo">
         Marco y Julia Activity Hub
       </h1>
-      <!-- MODIFICADO: Texto inicial -->
-      <p class="text-gray-400" x-show="activeTab === null">Pincha en tu nombre e introduce tu clave para ver las
-        actividades</p>
-      <p class="text-gray-400" x-show="activeTab !== null">¡Hola de nuevo! Explora tus actividades.</p>
-      <!-- Podríamos añadir un botón de reset aquí si quisiéramos -->
-      <!-- <button @click="resetVisited()" class="mt-2 text-xs text-gray-500 hover:text-red-400">Reiniciar todo (incluye claves)</button> -->
+      <!-- Instrucciones condicionales -->
+      <p class="text-gray-400 mt-2" x-show="activeTab === null">Pincha en tu nombre e introduce tu clave para empezar
+      </p>
+      <p class="text-gray-400 mt-2" x-show="activeTab !== null">¡Hola de nuevo! Explora tus actividades.</p>
     </div>
 
-    <!-- Pestañas de Selección (Julia/Marco) -->
-    <!-- MODIFICADO: Se muestran siempre que no haya una categoría abierta (como antes) -->
+    <!-- Pestañas de Selección (Julia/Marco) - Visibles si no hay categoría abierta -->
     <div class="flex justify-center mb-8" x-show="openCategoryIndex.julia === null && openCategoryIndex.marco === null">
       <div class="inline-flex rounded-full shadow-md overflow-hidden">
-        <!-- MODIFICADO: El @click llama a requestTabSwitch -->
+        <!-- Botón Julia -->
         <button
                 @click="requestTabSwitch('julia')"
                 :class="{
@@ -47,7 +82,7 @@
                 class="tab-button px-16 py-2 font-medium rounded-full transition-all duration-300 focus:outline-none">
           Julia
         </button>
-        <!-- MODIFICADO: El @click llama a requestTabSwitch -->
+        <!-- Botón Marco -->
         <button
                 @click="requestTabSwitch('marco')"
                 :class="{
@@ -63,17 +98,70 @@
     <!-- Contenedor Principal de Actividades -->
     <div class="max-w-3xl mx-auto">
 
+      <!-- ***** Tarjeta de Bienvenida MÁS DIVERTIDA (Visible antes de autenticar) ***** -->
+      <div x-show="activeTab === null"
+           x-transition:enter="fade-in-scale"
+           x-transition:enter-start="fade-in-scale-start"
+           x-transition:enter-end="fade-in-scale-end"
+           x-transition:leave="transition ease-in duration-300"
+           x-transition:leave-start="opacity-100 transform scale-100"
+           x-transition:leave-end="opacity-0 transform scale-95">
+        <!-- Fondo degradado con colores de ambos -->
+        <div
+             class="card p-8 mb-8 text-center bg-gradient-to-br from-pink-200 via-purple-200 to-teal-200 border-purple-300 shadow-xl overflow-hidden relative">
+          <!-- Barras decorativas -->
+          <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"></div>
+          <div class="absolute bottom-0 right-0 w-full h-2 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500">
+          </div>
+
+          <!-- Título con degradado -->
+          <h2
+              class="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-pink-600 via-purple-600 to-teal-600 bg-clip-text text-transparent">
+            ¡Listos para la Aventura! ✨
+          </h2>
+          <p class="text-lg text-gray-700 mb-6">¡Explora, juega y aprende un montón de cosas nuevas!</p>
+
+          <!-- Iconos animados con colores variados -->
+          <div class="flex justify-center flex-wrap gap-4 sm:gap-6 text-4xl sm:text-5xl mb-8">
+            <i class="fas fa-puzzle-piece text-pink-500 icon-pulse" style="animation-delay: 0s;"></i>
+            <i class="fas fa-flask text-teal-500 icon-pulse" style="animation-delay: 0.15s;"></i>
+            <i class="fas fa-paint-brush text-red-500 icon-pulse" style="animation-delay: 0.3s;"></i>
+            <i class="fas fa-rocket text-cyan-500 icon-pulse" style="animation-delay: 0.45s;"></i>
+            <i class="fas fa-calculator text-yellow-500 icon-pulse" style="animation-delay: 0.6s;"></i>
+            <i class="fas fa-language text-purple-500 icon-pulse" style="animation-delay: 0.75s;"></i>
+          </div>
+
+          <!-- Instrucción con nombres coloreados -->
+          <p class="text-md font-medium text-gray-800">¡Pinchad en vuestro nombre <span
+                  class="text-pink-600 font-bold">Julia</span> o <span class="text-teal-600 font-bold">Marco</span> para
+            empezar!</p>
+          <!-- Iconos de dedo coloreados -->
+          <div class="text-3xl mt-3">
+            <span class="text-pink-500 inline-block transform -rotate-45">👆</span>
+            <span class="text-teal-500 inline-block transform rotate-45">👆</span>
+          </div>
+        </div>
+      </div>
+      <!-- ***** FIN Tarjeta de Bienvenida ***** -->
+
+
       <!-- ******************** -->
       <!-- Actividades de Julia -->
       <!-- ******************** -->
-      <!-- MODIFICADO: Añadido chequeo de isAuthenticated.julia -->
+      <!-- Visible si la pestaña es Julia y está autenticada -->
       <div x-show="activeTab === 'julia' && isAuthenticated.julia" x-transition>
         <!-- Vista Lista Principal Julia (si no hay categoría abierta) -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.julia === null">
-          <!-- ... (contenido interno sin cambios) ... -->
-          <div class="text-center bg-gradient-to-r from-pink-500 to-red-500 rounded-full">
-            <h2 class="text-4xl font-bold text-white p-3">Julia</h2>
+          <!-- Cabecera con Título y Botón Cerrar Sesión -->
+          <div
+               class="flex justify-between items-center mb-6 bg-gradient-to-r from-pink-500 to-red-500 rounded-full px-4 py-2">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white">Julia</h2>
+            <button @click="logout()" title="Cerrar Sesión"
+                    class="bg-white text-pink-600 hover:bg-pink-100 rounded-full p-2 shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-300">
+              <i class="fas fa-sign-out-alt fa-lg"></i>
+            </button>
           </div>
+          <!-- Lista de Actividades/Categorías Julia -->
           <div class="space-y-3">
             <template x-for="(activity, index) in juliaActivities" :key="index">
               <div> <!-- Contenedor para cada item -->
@@ -124,11 +212,9 @@
         </div>
 
         <!-- Vista Submenú Julia (si hay categoría abierta) -->
-        <!-- MODIFICADO: El x-show principal ya controla la autenticación -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.julia !== null" x-transition>
-          <!-- ... (contenido interno sin cambios) ... -->
           <template x-if="openCategoryIndex.julia !== null"> <!-- Evita error si es null -->
-            <div> <!-- Necesario para que x-if funcione bien con template -->
+            <div>
               <!-- Botón Volver y Título de Categoría -->
               <div class="flex items-center  mb-6">
                 <button @click="toggleCategory('julia', openCategoryIndex.julia)"
@@ -162,7 +248,6 @@
                       <div class="flex-grow">
                         <h3 class="font-medium text-gray-800" x-text="subActivity.title"></h3>
                         <p class="text-sm text-gray-500" x-text="subActivity.description || ''"></p>
-                        <!-- Añadir description si existe -->
                       </div>
                       <div class="ml-auto flex-shrink-0 flex items-center space-x-2">
                         <span x-show="subActivity.visited"
@@ -176,20 +261,25 @@
             </div>
           </template>
         </div>
-      </div>
+      </div><!-- Fin Actividades Julia -->
 
       <!-- ******************** -->
       <!-- Actividades de Marco -->
       <!-- ******************** -->
-      <!-- MODIFICADO: Añadido chequeo de isAuthenticated.marco -->
+      <!-- Visible si la pestaña es Marco y está autenticado -->
       <div x-show="activeTab === 'marco' && isAuthenticated.marco" x-transition>
         <!-- Vista Lista Principal Marco (si no hay categoría abierta) -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.marco === null">
-          <!-- ... (contenido interno sin cambios) ... -->
-          <div class="text-center mb-6 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-full">
-            <h2 class="text-4xl font-bold text-white p-3">Marco</h2>
-            <!--<p class="text-black">10 años</p>-->
+          <!-- Cabecera con Título y Botón Cerrar Sesión -->
+          <div
+               class="flex justify-between items-center mb-6 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-full px-4 py-2">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white">Marco</h2>
+            <button @click="logout()" title="Cerrar Sesión"
+                    class="bg-white text-teal-600 hover:bg-teal-100 rounded-full p-2 shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-300">
+              <i class="fas fa-sign-out-alt fa-lg"></i>
+            </button>
           </div>
+          <!-- Lista de Actividades/Categorías Marco -->
           <div class="space-y-3">
             <template x-for="(activity, index) in marcoActivities" :key="index">
               <div> <!-- Contenedor para cada item -->
@@ -240,11 +330,9 @@
         </div>
 
         <!-- Vista Submenú Marco (si hay categoría abierta) -->
-        <!-- MODIFICADO: El x-show principal ya controla la autenticación -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.marco !== null" x-transition>
-          <!-- ... (contenido interno sin cambios) ... -->
           <template x-if="openCategoryIndex.marco !== null"> <!-- Evita error si es null -->
-            <div> <!-- Necesario para que x-if funcione bien con template -->
+            <div>
               <!-- Botón Volver y Título de Categoría -->
               <div class="flex items-center mb-6">
                 <button @click="toggleCategory('marco', openCategoryIndex.marco)"
@@ -278,7 +366,6 @@
                       <div class="flex-grow">
                         <h3 class="font-medium text-gray-800" x-text="subActivity.title"></h3>
                         <p class="text-sm text-gray-500" x-text="subActivity.description || ''"></p>
-                        <!-- Añadir description si existe -->
                       </div>
                       <div class="ml-auto flex-shrink-0 flex items-center space-x-2">
                         <span x-show="subActivity.visited"
@@ -292,12 +379,13 @@
             </div>
           </template>
         </div>
-      </div>
+      </div> <!-- Fin Actividades Marco -->
 
     </div> <!-- Fin Contenedor Principal de Actividades -->
 
-  </div>
+  </div> <!-- Fin Alpine.js Component Root -->
 
+  <!-- Custom JavaScript -->
   <script src="index.js"></script>
 </body>
 

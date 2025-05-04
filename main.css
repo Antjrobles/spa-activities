@@ -1,63 +1,83 @@
-import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* Definición de variables de color */
 :root {
-  --julia-color: #ff6b6b;
-  --marco-color: #4ecdc4;
-  --dark-julia: #ff3d3d;
-  --dark-marco: #2ec4b6;
+  --julia-color: #ff6b6b; /* Rosa/Rojo Julia */
+  --marco-color: #4ecdc4; /* Teal/Cyan Marco */
+  --dark-julia: #ff3d3d; /* Variante más oscura Julia */
+  --dark-marco: #2ec4b6; /* Variante más oscura Marco */
+  --bg-gradient-start: #111213; /* Inicio gradiente fondo */
+  --bg-gradient-end: #e2e8f0; /* Fin gradiente fondo */
+  --card-bg: rgba(255, 255, 255, 0.9); /* Fondo tarjeta */
+  --card-border: rgba(255, 255, 255, 0.2); /* Borde tarjeta */
+  --text-color: #333; /* Color texto general */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* Color sombra general */
+  --shadow-color-light: rgba(0, 0, 0, 0.05); /* Color sombra ligera */
 }
+
+/* Estilos base del body */
 body {
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #111213 0%, #e2e8f0 100%);
-  min-height: 100vh;
+  font-family: "Poppins", sans-serif; /* Fuente principal */
+  /* Fondo con gradiente lineal (ajustado para que coincida con el radial de Tailwind si se quita) */
+  /* background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%); */
+  min-height: 100vh; /* Asegura altura mínima */
+  /* El fondo radial se aplica con Tailwind directamente en el HTML */
 }
+
+/* Estilo base de las tarjetas */
 .card {
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: #111213 1px solid;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(16px) saturate(180%); /* Efecto cristal esmerilado */
+  -webkit-backdrop-filter: blur(16px) saturate(180%); /* Para compatibilidad Safari */
+  border: 1px solid var(--card-border); /* Borde sutil */
+  background-color: var(--card-bg); /* Fondo semi-transparente */
+  border-radius: 20px; /* Bordes redondeados */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave */
+  box-shadow: 0 10px 15px -3px var(--shadow-color),
+    0 4px 6px -2px var(--shadow-color-light); /* Sombra */
 }
+
+/* Efecto hover en tarjetas */
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-5px); /* Elevar ligeramente */
+  box-shadow: 0 20px 25px -5px var(--shadow-color),
+    0 10px 10px -5px var(--shadow-color-light); /* Sombra más pronunciada */
 }
-.avatar {
-  background: linear-gradient(45deg, var(--julia-color), var(--dark-julia));
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-.avatar.marco {
-  background: linear-gradient(45deg, var(--marco-color), var(--dark-marco));
-}
+
+/* Estilo para elementos de actividad (enlaces/categorías) */
 .activity-item {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: white;
-  border-radius: 10px;
-  border-left: 4px solid transparent;
-  position: relative;
-  overflow: hidden;
-  box-shadow: #111213 0px 1px 3px 0px, #111213 0px 1px 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave */
+  background-color: white; /* Fondo blanco */
+  border-radius: 10px; /* Bordes redondeados */
+  border-left: 4px solid transparent; /* Borde izquierdo inicial transparente */
+  position: relative; /* Para pseudo-elementos */
+  overflow: hidden; /* Para efecto ::after */
+  /* Sombra más sutil para items individuales */
+  box-shadow: 0 1px 3px 0 var(--shadow-color-light), 0 1px 2px 0 var(--shadow-color-light);
 }
+
+/* Efecto hover en items de actividad Julia */
 .activity-item:hover {
-  transform: translateX(5px);
-  border-left-color: var(--julia-color);
+  transform: translateX(5px); /* Desplazar a la derecha */
+  border-left-color: var(--julia-color); /* Mostrar borde izquierdo color Julia */
 }
+
+/* Efecto hover en items de actividad Marco */
 .activity-item.marco:hover {
-  border-left-color: var(--marco-color);
+  border-left-color: var(--marco-color); /* Mostrar borde izquierdo color Marco */
 }
+
+/* Estilo para items visitados Julia */
 .activity-item.visited {
-  background-color: rgba(255, 107, 107, 0.1);
-  border-left-color: var(--julia-color);
+  background-color: rgba(255, 107, 107, 0.1); /* Fondo ligeramente rosa */
+  border-left-color: var(--julia-color); /* Borde izquierdo visible */
 }
+/* Estilo para items visitados Marco */
 .activity-item.marco.visited {
-  background-color: rgba(78, 205, 196, 0.1);
-  border-left-color: var(--marco-color);
+  background-color: rgba(78, 205, 196, 0.1); /* Fondo ligeramente teal */
+  border-left-color: var(--marco-color); /* Borde izquierdo visible */
 }
+
+/* Efecto brillo sutil al pasar el ratón por encima (opcional) */
 .activity-item::after {
   content: "";
   position: absolute;
@@ -67,76 +87,87 @@ body {
   height: 100%;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.3) 0%,
-    rgba(255, 255, 255, 0) 100%
+    rgba(255, 255, 255, 0.3) 0%, /* Blanco semi-transparente */
+    rgba(255, 255, 255, 0) 100% /* Transparente */
   );
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  transform: translateX(-100%); /* Oculto a la izquierda */
+  transition: transform 0.4s ease; /* Transición suave del brillo */
+  pointer-events: none; /* No interfiere con el click */
 }
+/* Mover el brillo al hacer hover */
 .activity-item:hover::after {
-  transform: translateX(100%);
+  transform: translateX(100%); /* Mover a la derecha */
 }
+
+
+/* Estilo de los botones de pestaña (Julia/Marco) */
 .tab-button {
-  transition: all 0.3s ease;
-  position: relative;
+  transition: all 0.3s ease; /* Transición suave */
+  position: relative; /* Para pseudo-elemento ::after */
 }
-.tab-button.active {
-  color: white;
+
+/* Pseudo-elemento para subrayado activo (se aplica con :class en HTML) */
+/* No es necesario .active aquí si se maneja con :class */
+/* .tab-button.active { color: white; } */ /* El color se aplica con :class */
+
+/* Subrayado para botón activo Julia */
+.tab-button:not(.marco):where(.bg-gradient-to-r)::after { /* Más específico para evitar conflictos */
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 10%; /* Ajustar para que no ocupe todo el ancho */
+    width: 80%;
+    height: 3px;
+    background-color: var(--julia-color);
+    border-radius: 2px;
 }
-.tab-button.active::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: var(--julia-color);
-  border-radius: 2px;
+/* Subrayado para botón activo Marco */
+.tab-button.marco:where(.bg-gradient-to-r)::after { /* :where para baja especificidad */
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background-color: var(--marco-color);
+    border-radius: 2px;
 }
-.tab-button.marco.active::after {
-  background-color: var(--marco-color);
-}
+
+/* Animación de flotación (Opcional - No usada actualmente pero definida) */
 .floating-button {
   animation: float 3s ease-in-out infinite;
 }
 @keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }
+
+/* Animación de pulso para destacar (Opcional - No usada actualmente pero definida) */
 .pulse {
   animation: pulse 2s infinite;
 }
 @keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
-  }
+  0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); } /* Rosa */
+  70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
 }
 .pulse.marco {
   animation: pulse-marco 2s infinite;
 }
 @keyframes pulse-marco {
-  0% {
-    box-shadow: 0 0 0 0 rgba(78, 205, 196, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(78, 205, 196, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(78, 205, 196, 0);
-  }
+  0% { box-shadow: 0 0 0 0 rgba(78, 205, 196, 0.4); } /* Teal */
+  70% { box-shadow: 0 0 0 10px rgba(78, 205, 196, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(78, 205, 196, 0); }
 }
 
-
+/* Ajustes responsivos básicos */
+@media (max-width: 640px) {
+  .tab-button {
+    padding-left: 2rem; /* Menos padding en botones en pantallas pequeñas */
+    padding-right: 2rem;
+  }
+  .card {
+    padding: 1.5rem; /* Menos padding en tarjetas */
+  }
+}
