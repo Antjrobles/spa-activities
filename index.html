@@ -17,8 +17,9 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <!-- Custom CSS -->
   <link href="main.css" rel="stylesheet" />
-  <!-- Estilo adicional para animación suave (opcional) -->
+  <!-- Estilo adicional para animación suave -->
   <style>
+    /* Transición de entrada/salida */
     .fade-in-scale {
       transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     }
@@ -33,22 +34,45 @@
       transform: scale(1);
     }
 
-    /* Animación de pulso suave para iconos */
-    @keyframes gentle-pulse {
+    /* Animación de flotar suave para iconos */
+    @keyframes float-gentle {
 
       0%,
       100% {
-        transform: scale(1);
+        transform: translateY(0px);
       }
 
       50% {
-        transform: scale(1.1);
+        transform: translateY(-8px);
       }
     }
 
-    .icon-pulse {
-      animation: gentle-pulse 2s ease-in-out infinite;
+    .icon-float {
+      animation: float-gentle 3s ease-in-out infinite;
     }
+
+    /* Animación para borde de texto CTA */
+    @keyframes pulse-border {
+
+      0%,
+      100% {
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+
+      50% {
+        border-color: rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    .cta-pulse-border {
+      border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+      animation: pulse-border 2s ease-in-out infinite;
+      padding-bottom: 2px;
+      /* Espacio para el borde */
+    }
+
+    /* Círculos decorativos animados (requiere ajustes en main.css o aquí) */
+    /* Ver implementación en main.css */
   </style>
 </head>
 
@@ -71,8 +95,8 @@
 
     <!-- Pestañas de Selección (Julia/Marco) - Visibles si no hay categoría abierta -->
     <div class="flex justify-center mb-8" x-show="openCategoryIndex.julia === null && openCategoryIndex.marco === null">
+      <!-- Contenido botones Julia/Marco (sin cambios) -->
       <div class="inline-flex rounded-full shadow-md overflow-hidden">
-        <!-- Botón Julia -->
         <button
                 @click="requestTabSwitch('julia')"
                 :class="{
@@ -82,7 +106,6 @@
                 class="tab-button px-16 py-2 font-medium rounded-full transition-all duration-300 focus:outline-none">
           Julia
         </button>
-        <!-- Botón Marco -->
         <button
                 @click="requestTabSwitch('marco')"
                 :class="{
@@ -98,7 +121,7 @@
     <!-- Contenedor Principal de Actividades -->
     <div class="max-w-3xl mx-auto">
 
-      <!-- ***** Tarjeta de Bienvenida MÁS DIVERTIDA (Visible antes de autenticar) ***** -->
+      <!-- ***** Tarjeta de Bienvenida AÚN MÁS ATRACTIVA ***** -->
       <div x-show="activeTab === null"
            x-transition:enter="fade-in-scale"
            x-transition:enter-start="fade-in-scale-start"
@@ -106,39 +129,54 @@
            x-transition:leave="transition ease-in duration-300"
            x-transition:leave-start="opacity-100 transform scale-100"
            x-transition:leave-end="opacity-0 transform scale-95">
-        <!-- Fondo degradado con colores de ambos -->
+
+        <!-- Tarjeta con gradiente más vivo, sombra interior y clase para círculos -->
         <div
-             class="card p-8 mb-8 text-center bg-gradient-to-br from-pink-200 via-purple-200 to-teal-200 border-purple-300 shadow-xl overflow-hidden relative">
-          <!-- Barras decorativas -->
+             class="welcome-card card p-8 mb-8 text-center bg-gradient-to-br from-pink-400 via-purple-500 to-teal-400 border-purple-300 shadow-xl overflow-hidden relative">
+          <!-- Barras decorativas (sin cambios) -->
           <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500"></div>
           <div class="absolute bottom-0 right-0 w-full h-2 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500">
           </div>
 
-          <!-- Título con degradado -->
-          <h2
-              class="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-pink-600 via-purple-600 to-teal-600 bg-clip-text text-transparent">
-            ¡Listos para la Aventura! ✨
+          <!-- Título con sombra de texto ligera -->
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4 text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.3);">
+            ¡La Aventura Comienza Aquí! 🚀
           </h2>
-          <p class="text-lg text-gray-700 mb-6">¡Explora, juega y aprende un montón de cosas nuevas!</p>
+          <p class="text-lg text-gray-100 mb-6 font-light">¿Listos para descubrir, crear y aprender?</p>
 
-          <!-- Iconos animados con colores variados -->
-          <div class="flex justify-center flex-wrap gap-4 sm:gap-6 text-4xl sm:text-5xl mb-8">
-            <i class="fas fa-puzzle-piece text-pink-500 icon-pulse" style="animation-delay: 0s;"></i>
-            <i class="fas fa-flask text-teal-500 icon-pulse" style="animation-delay: 0.15s;"></i>
-            <i class="fas fa-paint-brush text-red-500 icon-pulse" style="animation-delay: 0.3s;"></i>
-            <i class="fas fa-rocket text-cyan-500 icon-pulse" style="animation-delay: 0.45s;"></i>
-            <i class="fas fa-calculator text-yellow-500 icon-pulse" style="animation-delay: 0.6s;"></i>
-            <i class="fas fa-language text-purple-500 icon-pulse" style="animation-delay: 0.75s;"></i>
+          <!-- Iconos más grandes, con animación float y hover scale -->
+          <div class="flex justify-center flex-wrap gap-5 sm:gap-8 text-5xl sm:text-6xl mb-10 mt-4">
+            <i class="fas fa-puzzle-piece text-white opacity-90 icon-float transform transition-transform duration-200 hover:scale-110"
+               style="animation-delay: 0s; text-shadow: 0 2px 4px rgba(255, 107, 107, 0.5);"></i>
+            <i class="fas fa-flask text-white opacity-90 icon-float transform transition-transform duration-200 hover:scale-110"
+               style="animation-delay: 0.2s; text-shadow: 0 2px 4px rgba(78, 205, 196, 0.5);"></i>
+            <i class="fas fa-paint-brush text-white opacity-90 icon-float transform transition-transform duration-200 hover:scale-110"
+               style="animation-delay: 0.4s; text-shadow: 0 2px 4px rgba(255, 82, 82, 0.5);"></i>
+            <i class="fas fa-rocket text-white opacity-90 icon-float transform transition-transform duration-200 hover:scale-110"
+               style="animation-delay: 0.6s; text-shadow: 0 2px 4px rgba(56, 189, 248, 0.5);"></i>
+            <i class="fas fa-calculator text-white opacity-90 icon-float transform transition-transform duration-200 hover:scale-110"
+               style="animation-delay: 0.8s; text-shadow: 0 2px 4px rgba(251, 191, 36, 0.5);"></i>
+            <i class="fas fa-language text-white opacity-90 icon-float transform transition-transform duration-200 hover:scale-110"
+               style="animation-delay: 1.0s; text-shadow: 0 2px 4px rgba(167, 139, 250, 0.5);"></i>
           </div>
 
-          <!-- Instrucción con nombres coloreados -->
-          <p class="text-md font-medium text-gray-800">¡Pinchad en vuestro nombre <span
-                  class="text-pink-600 font-bold">Julia</span> o <span class="text-teal-600 font-bold">Marco</span> para
-            empezar!</p>
-          <!-- Iconos de dedo coloreados -->
-          <div class="text-3xl mt-3">
-            <span class="text-pink-500 inline-block transform -rotate-45">👆</span>
-            <span class="text-teal-500 inline-block transform rotate-45">👆</span>
+          <!-- Texto CTA con borde animado -->
+          <p class="text-md font-medium text-white mb-4">
+            <span class="cta-pulse-border">
+              ¡Seleccionad vuestro nombre <span class="font-bold text-pink-200">Julia</span> o <span
+                    class="font-bold text-teal-200">Marco</span> para entrar!
+            </span>
+          </p>
+          <!-- Iconos de dedo -->
+          <div class="text-4xl mt-3">
+            <span class="text-pink-300 inline-block transform -rotate-45 transition-transform hover:scale-125">👆</span>
+            <span class="text-teal-300 inline-block transform rotate-45 transition-transform hover:scale-125">👆</span>
+          </div>
+
+          <!-- Elementos para los círculos animados (controlados por CSS) -->
+          <div class="decorative-circles">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
           </div>
         </div>
       </div>
@@ -148,11 +186,9 @@
       <!-- ******************** -->
       <!-- Actividades de Julia -->
       <!-- ******************** -->
-      <!-- Visible si la pestaña es Julia y está autenticada -->
       <div x-show="activeTab === 'julia' && isAuthenticated.julia" x-transition>
-        <!-- Vista Lista Principal Julia (si no hay categoría abierta) -->
+        <!-- ... (Contenido de Julia SIN CAMBIOS respecto a la versión anterior) ... -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.julia === null">
-          <!-- Cabecera con Título y Botón Cerrar Sesión -->
           <div
                class="flex justify-between items-center mb-6 bg-gradient-to-r from-pink-500 to-red-500 rounded-full px-4 py-2">
             <h2 class="text-3xl sm:text-4xl font-bold text-white">Julia</h2>
@@ -161,11 +197,9 @@
               <i class="fas fa-sign-out-alt fa-lg"></i>
             </button>
           </div>
-          <!-- Lista de Actividades/Categorías Julia -->
           <div class="space-y-3">
             <template x-for="(activity, index) in juliaActivities" :key="index">
-              <div> <!-- Contenedor para cada item -->
-                <!-- Enlace directo -->
+              <div>
                 <template x-if="activity.type === 'link'">
                   <a :href="activity.link" target="_blank"
                      class="activity-item block p-4 rounded-lg bg-gray-100 shadow-sm hover:shadow-2xl hover:border-l-[#ff6b6b] hover:bg-gray-300"
@@ -188,7 +222,6 @@
                     </div>
                   </a>
                 </template>
-                <!-- Categoría (Clickable Div) -->
                 <template x-if="activity.type === 'category'">
                   <div @click="toggleCategory('julia', index)"
                        class="activity-item cursor-pointer p-4 rounded-lg bg-gray-100 shadow-sm hover:shadow-2xl hover:border-l-[#ff6b6b] hover:bg-gray-300">
@@ -210,12 +243,9 @@
             </template>
           </div>
         </div>
-
-        <!-- Vista Submenú Julia (si hay categoría abierta) -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.julia !== null" x-transition>
-          <template x-if="openCategoryIndex.julia !== null"> <!-- Evita error si es null -->
+          <template x-if="openCategoryIndex.julia !== null">
             <div>
-              <!-- Botón Volver y Título de Categoría -->
               <div class="flex items-center  mb-6">
                 <button @click="toggleCategory('julia', openCategoryIndex.julia)"
                         class="mr-4 text-gray-500 hover:text-gray-700 text-2xl">
@@ -232,7 +262,6 @@
                   </div>
                 </div>
               </div>
-              <!-- Lista de Sub-Actividades -->
               <div class="space-y-3">
                 <template x-for="(subActivity, subIndex) in juliaActivities[openCategoryIndex.julia].subActivities"
                           :key="subIndex">
@@ -266,11 +295,9 @@
       <!-- ******************** -->
       <!-- Actividades de Marco -->
       <!-- ******************** -->
-      <!-- Visible si la pestaña es Marco y está autenticado -->
       <div x-show="activeTab === 'marco' && isAuthenticated.marco" x-transition>
-        <!-- Vista Lista Principal Marco (si no hay categoría abierta) -->
+        <!-- ... (Contenido de Marco SIN CAMBIOS respecto a la versión anterior) ... -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.marco === null">
-          <!-- Cabecera con Título y Botón Cerrar Sesión -->
           <div
                class="flex justify-between items-center mb-6 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-full px-4 py-2">
             <h2 class="text-3xl sm:text-4xl font-bold text-white">Marco</h2>
@@ -279,16 +306,13 @@
               <i class="fas fa-sign-out-alt fa-lg"></i>
             </button>
           </div>
-          <!-- Lista de Actividades/Categorías Marco -->
           <div class="space-y-3">
             <template x-for="(activity, index) in marcoActivities" :key="index">
-              <div> <!-- Contenedor para cada item -->
-                <!-- Enlace directo -->
+              <div>
                 <template x-if="activity.type === 'link'">
                   <a :href="activity.link" target="_blank"
                      class="activity-item marco block p-4 rounded-lg bg-gray-200 shadow-sm hover:shadow-md hover:border-l-[--marco-color]"
-                     :class="{ 'visited': activity.visited }"
-                     @click="markVisited('marco', index)">
+                     :class="{ 'visited': activity.visited }" @click="markVisited('marco', index)">
                     <div class="flex items-center">
                       <div class="bg-teal-100 p-3 rounded-lg mr-4 flex-shrink-0"
                            :class="{ 'bg-teal-200': activity.visited }">
@@ -306,7 +330,6 @@
                     </div>
                   </a>
                 </template>
-                <!-- Categoría (Clickable Div) -->
                 <template x-if="activity.type === 'category'">
                   <div @click="toggleCategory('marco', index)"
                        class="activity-item marco cursor-pointer p-4 rounded-lg bg-gray-200 shadow-sm hover:shadow-md hover:border-l-[--marco-color]">
@@ -328,12 +351,9 @@
             </template>
           </div>
         </div>
-
-        <!-- Vista Submenú Marco (si hay categoría abierta) -->
         <div class="card p-6 mb-8" x-show="openCategoryIndex.marco !== null" x-transition>
-          <template x-if="openCategoryIndex.marco !== null"> <!-- Evita error si es null -->
+          <template x-if="openCategoryIndex.marco !== null">
             <div>
-              <!-- Botón Volver y Título de Categoría -->
               <div class="flex items-center mb-6">
                 <button @click="toggleCategory('marco', openCategoryIndex.marco)"
                         class="mr-4 text-gray-500 hover:text-gray-700 text-2xl">
@@ -350,7 +370,6 @@
                   </div>
                 </div>
               </div>
-              <!-- Lista de Sub-Actividades -->
               <div class="space-y-3">
                 <template x-for="(subActivity, subIndex) in marcoActivities[openCategoryIndex.marco].subActivities"
                           :key="subIndex">
